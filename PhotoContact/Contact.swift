@@ -10,9 +10,10 @@ import SwiftUI
 
 struct Contact {
     let name: String
-    var pic: Image
+    var pic: Image?
+    let phoneNumber: Int
 }
 
 enum LoadingState {
-    case isEmpty, only1Pic, severalPics
+    case isEmpty, only1Contact, severalContacts
 }

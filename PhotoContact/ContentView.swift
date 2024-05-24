@@ -13,15 +13,15 @@ struct ContentView: View {
     @State private var pickerItem: PhotosPickerItem?
     @State private var selectedImage: Image?
     
-    @State private var contacts = [Contact]()
+    var contacts = Contacts()
     
     var loadingState: LoadingState {
-        if contacts.isEmpty {
+        if contacts.contactList.isEmpty {
             return LoadingState.isEmpty
-        } else if contacts.count == 1 {
-            return LoadingState.only1Pic
+        } else if contacts.contactList.count == 1 {
+            return LoadingState.only1Contact
         } else {
-            return LoadingState.severalPics
+            return LoadingState.severalContacts
         }
     }
     
@@ -29,10 +29,10 @@ struct ContentView: View {
         VStack {
             switch loadingState {
             case .isEmpty:
-                IsEmpty()
-            case .only1Pic:
-                Text("")
-            case .severalPics:
+                IsEmptyView()
+            case .only1Contact:
+                Text("hello friend")
+            case .severalContacts:
                 Text("")
             }
         }
