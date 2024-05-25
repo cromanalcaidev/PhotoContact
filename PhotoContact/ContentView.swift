@@ -31,7 +31,7 @@ struct ContentView: View {
             case .isEmpty:
                 IsEmptyView()
             case .only1Contact:
-                Text("hello friend")
+                Only1ContactView()
             case .severalContacts:
                 Text("")
             }

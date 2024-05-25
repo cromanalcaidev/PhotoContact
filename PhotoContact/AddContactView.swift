@@ -70,7 +70,7 @@ struct AddContactView: View {
     }
     
     func saveContact() {
-        let newContact = Contact(name: contactName, pic: selectedImage, phoneNumber: phoneNumber)
+        let newContact = Contact(id: UUID(), name: contactName, pic: selectedImage, phoneNumber: phoneNumber)
         contacts.contactList.append(newContact)
         dismiss()
     }

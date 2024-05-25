@@ -8,12 +8,19 @@
 import Foundation
 import SwiftUI
 
-struct Contact {
+struct Contact: Identifiable {
+    let id: UUID
     let name: String
     var pic: Image?
     let phoneNumber: Int
+    
+    #if DEBUG
+    static let example = Contact(id: UUID(), name: "Joe Pera", pic: Image("joecitoPera"), phoneNumber: 0034616428065)
+    #endif
 }
 
 enum LoadingState {
     case isEmpty, only1Contact, severalContacts
 }
+
+

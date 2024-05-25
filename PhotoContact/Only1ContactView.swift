@@ -8,25 +8,39 @@
 import SwiftUI
 
 struct Only1ContactView: View {
+    @State private var enableAddContact = false
     let contacts = Contacts()
     
     var body: some View {
-        VStack {
-            Section {
-                Text("Congrats, your 1st contact is...")
-                    .font(.title)
-            }
-            
-            Section {
-//                Image(contacts.contactList[0].pic ?? systemImage: )
-                Image("joecitoPera")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 200, height: 200)
-                    .clipShape(.circle)
-                    .padding()
+        
+        NavigationStack {
+            VStack {
+                Section {
+                    Text("Congrats, you added \n your 1st contact!")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding()
+                }
                 
-                Text("Joe Pera")
+                Section {
+    //                Image(contacts.contactList[0].pic ?? systemImage: )
+                    Image("joecitoPera")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 200, height: 200)
+                        .clipShape(.circle)
+                        .padding()
+                    
+                    Text("Joe Pera")
+                        .font(.system(size: 20))
+                }
+            }
+            .toolbar {
+                ToolbarItem {
+                    Button("Add more contacts", systemImage: "plus.circle.fill") {
+                        enableAddContact.toggle()
+                    }
+                }
             }
         }
     }
