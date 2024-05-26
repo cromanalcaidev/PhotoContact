@@ -17,6 +17,7 @@ struct Contact: Identifiable {
     #if DEBUG
     static let example = Contact(id: UUID(), name: "Joe Pera", pic: Image("joecitoPera"), phoneNumber: 0034616428065)
     #endif
+    
 }
 
 enum LoadingState {
