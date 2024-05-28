@@ -8,10 +8,13 @@
 import iPhoneNumberField
 import PhotosUI
 import SwiftUI
+import UIKit.UIImage
 
 struct AddContactView: View {
     @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: Image?
+    @State private var selectedImage: Data?
+    @State private var convertedImage = Image("joecitoPera")
+    @State private var convertedImage2: UIImage
     @State private var contactName = "Add your contact's name"
     @State var phoneNumber = "Phone"
     
@@ -26,7 +29,7 @@ struct AddContactView: View {
                     PhotosPicker(selection: $pickerItem) {
                         
                         if let selectedImage {
-                            selectedImage
+                            Image(uiImage: convertedImage2)
 //                            Image("joecitoPera")
                                 .resizable()
                                 .scaledToFill()
@@ -46,7 +49,12 @@ struct AddContactView: View {
                     .padding(.vertical, 20)
                     .onChange(of: pickerItem) {
                         Task {
-                            selectedImage = try await pickerItem?.loadTransferable(type: Image.self)
+                            selectedImage = try await pickerItem?.loadTransferable(type: Data.self)
+                            if selectedImage != nil {
+                                convertedImage2 = UIImage(data: selectedImage!)!
+                            } else {
+                                convertedImage = Image("joecitoPera")
+                            }
                         }
                     }
                     
@@ -77,12 +85,12 @@ struct AddContactView: View {
     }
     
     func saveContact() {
-        let newContact = Contact(id: UUID(), name: contactName, pic: selectedImage, phoneNumber: Int(phoneNumber) ?? 00000)
+        let newContact = Contact(id: UUID(), name: contactName, pic: convertedImage, phoneNumber: Int(phoneNumber) ?? 00000)
         contacts.contactList.append(newContact)
         dismiss()
     }
 }
 
-#Preview {
-    AddContactView()
-}
+//#Preview {
+//    AddContactView()
+//}
