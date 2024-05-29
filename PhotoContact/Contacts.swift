@@ -16,19 +16,25 @@ class Contacts {
         }
     }
     
-    let savePath = URL.documentsDirectory.appending(path: "SavedPlaces")
+    let savePath = URL.documentsDirectory.appending(path: "SavedContacts")
     
-    let myContacts = [
-        Contact(id: UUID(), name: "Joe Pera 1", pic: Image("joecitoPera"), phoneNumber: 333),
-        Contact(id: UUID(), name: "Joe Pera 2", pic: Image("joecitoPera"), phoneNumber: 3334413212),
-        Contact(id: UUID(), name: "Joe Pera 3", pic: Image("joecitoPera"), phoneNumber: 33334112312)
-    ]
+    init() {
+        do {
+            let data = try Data(contentsOf: savePath)
+            contactList = try JSONDecoder().decode([Contact].self, from: data)
+        } catch {
+            contactList = []
+        }
+        
+    }
     
     func save() {
-//        do {
-//            let data = try JSONEncoder().encode(contactList)
-//            try data.write(to: savePath)
-//        }
+        do {
+            let data = try JSONEncoder().encode(contactList)
+            try data.write(to: savePath)
+        } catch {
+            print("Unable to save data.")
+        }
     }
     
 }

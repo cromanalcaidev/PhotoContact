@@ -8,15 +8,15 @@
 import Foundation
 import SwiftUI
 
-struct Contact: Identifiable {
+struct Contact: Codable, Identifiable {
     let id: UUID
     let name: String
-    var pic: Image?
+    var pic: Data?
     let phoneNumber: Int
     
-    #if DEBUG
-    static let example = Contact(id: UUID(), name: "Joe Pera", pic: Image("joecitoPera"), phoneNumber: 0034616428065)
-    #endif
+//    #if DEBUG
+//    static let example = Contact(id: UUID(), name: "Joe Pera", pic: Image("joecitoPera"), phoneNumber: 0034616428065)
+//    #endif
     
 }
 

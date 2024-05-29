@@ -8,89 +8,74 @@
 import iPhoneNumberField
 import PhotosUI
 import SwiftUI
-import UIKit.UIImage
 
 struct AddContactView: View {
-    @State private var pickerItem: PhotosPickerItem?
-    @State private var selectedImage: Data?
-    @State private var convertedImage = Image("joecitoPera")
-    @State private var convertedImage2: UIImage
-    @State private var contactName = "Add your contact's name"
-    @State var phoneNumber = "Phone"
     
     @State private var contacts = Contacts()
+    
+    @State private var contactName = "Add your contact's name"
+    @State var phoneNumber = "Add your contact's number"
+    
+    @State private var pickerItem: PhotosPickerItem? = nil
+    @State private var selectedImageData: Data? = nil
+    
+    
     
     @Environment(\.dismiss) var dismiss
     
     var body: some View {
         NavigationStack {
-            ZStack {
-                VStack {
-                    PhotosPicker(selection: $pickerItem) {
+            List {
+                Section("Contact name") {
+                    TextField("Name", text: $contactName)
+                }
+                
+                Section("Phone number") {
+                    TextField("Phone number", text: $phoneNumber)
+                        .keyboardType(.numberPad)
+                }
+                
+                
+                Section {
+                    PhotosPicker(selection: $pickerItem,
+                                 matching: .images,
+                                 photoLibrary: .shared()) {
                         
-                        if let selectedImage {
-                            Image(uiImage: convertedImage2)
-//                            Image("joecitoPera")
+                        if let selectedImageData,
+                           let uiImage = UIImage(data: selectedImageData) {
+                            Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
-                                .frame(width: 250, height: 250)
+                                .frame(width: 250, height: 250, alignment: .center)
                                 .clipShape(.circle)
-                                .toolbar {
-                                    ToolbarItemGroup(placement: .topBarTrailing) {
-                                        Button("Save contact", systemImage: "", action: saveContact)
-                                    }
-                                }
-                            
+                            Button("LocalizedStringKey", role: .destructive) {
+                                
+                            }
                             
                         } else {
-                            ContentUnavailableView("Select a picture", systemImage: "photo.badge.plus", description: Text("Tap to load a pic"))
+                            Label("Add picture", systemImage: "photo")
                         }
                     }
-                    .padding(.vertical, 20)
-                    .onChange(of: pickerItem) {
-                        Task {
-                            selectedImage = try await pickerItem?.loadTransferable(type: Data.self)
-                            if selectedImage != nil {
-                                convertedImage2 = UIImage(data: selectedImage!)!
-                            } else {
-                                convertedImage = Image("joecitoPera")
-                            }
-                        }
-                    }
-                    
-                    VStack {
-                        if selectedImage != nil {
-                            Form {
-                                Section {
-                                    TextField("Add a name", text: $contactName)
-                                        .multilineTextAlignment(.center)
-                                }
-                                
-                                Section {
-//                                    TextField("Add a phone number", value: $phoneNumber, format: .number)
-//                                        .multilineTextAlignment(.center)
-                                    
-                                    iPhoneNumberField("Phone", text: $phoneNumber)
-                                        .flagHidden(false)
-                                        .flagSelectable(true)
-                                        .prefixHidden(false)
-                                        .multilineTextAlignment(.center)
-                                }
-                            }
-                        }
+                     .task(id: pickerItem) {
+                         if let data = try? await pickerItem?.loadTransferable(type: Data.self) {
+                             selectedImageData = data
+                         }
+                     }
+                }
+                .toolbar {
+                    ToolbarItemGroup(placement: .topBarTrailing) {
+                        Button("Save contact", systemImage: "square.and.arrow.down", action: saveContact)
                     }
                 }
             }
         }
     }
-    
     func saveContact() {
-        let newContact = Contact(id: UUID(), name: contactName, pic: convertedImage, phoneNumber: Int(phoneNumber) ?? 00000)
+        let newContact = Contact(id: UUID(), name: contactName, pic: selectedImageData, phoneNumber: Int(phoneNumber) ?? 00000)
         contacts.contactList.append(newContact)
-        dismiss()
     }
 }
 
-//#Preview {
-//    AddContactView()
-//}
+#Preview {
+    AddContactView()
+}
