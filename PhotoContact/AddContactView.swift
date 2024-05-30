@@ -16,7 +16,7 @@ struct AddContactView: View {
     @State private var contactName = "Add your contact's name"
     @State var phoneNumber = "Add your contact's number"
     
-    @State private var pickerItem: PhotosPickerItem? = nil
+    @State var pickerItem: PhotosPickerItem? = nil
     @State private var selectedImageData: Data? = nil
     
     
@@ -36,20 +36,24 @@ struct AddContactView: View {
                 }
                 
                 
-                Section {
+                
+                Section("Contact photo") {
                     PhotosPicker(selection: $pickerItem,
                                  matching: .images,
                                  photoLibrary: .shared()) {
                         
-                        if let selectedImageData,
-                           let uiImage = UIImage(data: selectedImageData) {
+                        if let imageData = selectedImageData,
+                           let uiImage = UIImage(data: imageData) {
                             Image(uiImage: uiImage)
                                 .resizable()
                                 .scaledToFill()
                                 .frame(width: 250, height: 250, alignment: .center)
                                 .clipShape(.circle)
-                            Button("LocalizedStringKey", role: .destructive) {
-                                
+                            Button("Remove picture", role: .destructive) {
+                                withAnimation {
+                                    pickerItem = nil
+                                    selectedImageData = nil
+                                }
                             }
                             
                         } else {
@@ -62,9 +66,12 @@ struct AddContactView: View {
                          }
                      }
                 }
-                .toolbar {
-                    ToolbarItemGroup(placement: .topBarTrailing) {
-                        Button("Save contact", systemImage: "square.and.arrow.down", action: saveContact)
+            }
+            .toolbar {
+                ToolbarItemGroup(placement: .topBarTrailing) {
+                    Button("Save contact", systemImage: "square.and.arrow.down") {
+                        saveContact()
+                        dismiss()
                     }
                 }
             }

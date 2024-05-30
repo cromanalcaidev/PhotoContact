@@ -22,37 +22,11 @@ struct SeveralContactsView: View {
     var body: some View {
         NavigationStack {
             if myContacts.contactList.isEmpty == true {
-                VStack {
-                    List {
-                        ForEach(mySampleContacts) { myContact in
-                            HStack {
-                                VStack {
-                                    Text(myContact.name)
-                                        .font(.system(size: 18))
-                                        .fontWeight(.bold)
-                                    
-                                    Text(myContact.phoneNumber, format: .number.grouping(.never))
-                                    
-                                }
-                                
-                            }
-                        }
-                    }
-                }
-                .navigationTitle("My contacts")
-            } else if myContacts.contactList.isEmpty == false {
-                VStack {
+                Text("Emtpy list")
+//                VStack {
 //                    List {
-//                        ForEach(myContacts.contactList) { myContact in
+//                        ForEach(mySampleContacts) { myContact in
 //                            HStack {
-//                                if myContact.pic != nil {
-//                                    myContact.pic?
-//                                        .resizable()
-//                                        .scaledToFit()
-//                                        .frame(width: 50, height: 50)
-//                                        .clipShape(.circle)
-//                                    
-//                                }
 //                                VStack {
 //                                    Text(myContact.name)
 //                                        .font(.system(size: 18))
@@ -65,11 +39,38 @@ struct SeveralContactsView: View {
 //                            }
 //                        }
 //                    }
+//                }
+//                .navigationTitle("My contacts")
+            } else if myContacts.contactList.isEmpty == false {
+                VStack {
+                    Text("Full list")
+//                    List {
+//                        ForEach(myContacts.contactList, id: \.id) { myContact in
+//                            HStack {
+//                                VStack {
+//                                    Text(myContact.name)
+//                                        .font(.system(size: 18))
+//                                        .fontWeight(.bold)
+//                                    
+//                                    Text(myContact.phoneNumber, format: .number.grouping(.never))
+//                                    
+//                                    if myContact.pic != nil {
+//                                        if let uiImage = UIImage(data: myContact.pic!) {
+//                                            Image(uiImage: uiImage)
+//                                                .resizable()
+//                                                .scaledToFill()
+//                                                .frame(width: 250, height: 250, alignment: .center)
+//                                                .clipShape(.circle)
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                        }
+//                    }
                 }
                 .navigationTitle("My contacts")
             }
         }
-        
     }
 }
 

@@ -5,11 +5,17 @@
 //  Created by Carlos Román Alcaide on 24/5/24.
 //
 
+import PhotosUI
 import SwiftUI
 
 struct Only1ContactView: View {
+    
+    let myContacts = Contacts()
+    
     @State private var enableAddContact = false
-    let contacts = Contacts()
+    
+    @State var pickerItem: PhotosPickerItem?
+    @State private var selectedImageData: Data?
     
     var body: some View {
         
@@ -24,15 +30,33 @@ struct Only1ContactView: View {
                 
                 Section {
     //                Image(contacts.contactList[0].pic ?? systemImage: )
-                    Image("joecitoPera")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 200, height: 200)
-                        .clipShape(.circle)
-                        .padding()
+                    Section("Contact photo") {
+                        PhotosPicker(selection: $pickerItem,
+                                     matching: .images,
+                                     photoLibrary: .shared()) {
+                            
+                            if let imageData = selectedImageData,
+                               let uiImage = UIImage(data: imageData) {
+                                Image(uiImage: uiImage)
+                                    .resizable()
+                                    .scaledToFill()
+                                    .frame(width: 250, height: 250, alignment: .center)
+                                    .clipShape(.circle)
+                            }
+                        }
+                         .task(id: pickerItem) {
+                             if let data = try? await pickerItem?.loadTransferable(type: Data.self) {
+                                 selectedImageData = data
+                             }
+                         }
+                    }
                     
-                    Text("Joe Pera")
-                        .font(.system(size: 20))
+                    if myContacts.contactList.isEmpty != true {
+                        Text(myContacts.contactList[0].name)
+                            .font(.system(size: 20))
+                    } else {
+                        Text("Joecito Pera")
+                    }
                 }
             }
             .toolbar {
@@ -41,6 +65,9 @@ struct Only1ContactView: View {
                         enableAddContact.toggle()
                     }
                 }
+            }
+            .sheet(isPresented: $enableAddContact) {
+                AddContactView()
             }
         }
     }

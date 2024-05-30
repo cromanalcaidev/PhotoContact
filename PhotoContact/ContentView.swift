@@ -33,7 +33,7 @@ struct ContentView: View {
             case .only1Contact:
                 Only1ContactView()
             case .severalContacts:
-                Text("")
+                Text("Hello")
             }
         }
         .padding()

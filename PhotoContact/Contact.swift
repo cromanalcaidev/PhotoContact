@@ -10,9 +10,9 @@ import SwiftUI
 
 struct Contact: Codable, Identifiable {
     let id: UUID
-    let name: String
+    var name: String
     var pic: Data?
-    let phoneNumber: Int
+    var phoneNumber: Int
     
 //    #if DEBUG
 //    static let example = Contact(id: UUID(), name: "Joe Pera", pic: Image("joecitoPera"), phoneNumber: 0034616428065)
